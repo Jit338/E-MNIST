@@ -14,9 +14,9 @@
 ## 📖 Table of Contents
 - [Overview](#-overview)
 - [Benchmarks](#-benchmarks)
-- [Quick Start](#-quick-start)
 - [Architecture & Math](#-architecture--math)
 - [Visualizations & Feature Maps](#-visualizations--feature-maps)
+- [Quick Start](#-quick-start)
 
 ---
 
@@ -35,27 +35,46 @@ The model was rigorously tested on standard handwritten digits and complex alpha
 
 ---
 
-<div>
-  <h2>🧠 Architecture & MathThe</h2>
-  architecture is purposefully lean, designed to maximize generalization through a single-pass convolutional feature extractor:
-  
-  Conv Layer: 16 Learned Kernels (3x3), ReLU Activation, Max Pooling (2x2).
-  Dense ANN: Flatten -> 128 Hidden -> 64 Hidden -> Output Layer.
-  
-  <h2>Advanced Optimizations</h2>
-    To achieve production-grade performance using pure NumPy, I implemented several advanced computational strategies:
-    <p>⚡ Numba JIT Compilation: Wrapped core matrix operations in @njit(fastmath=True) to execute at C-level speeds, overcoming the Python interpreter bottleneck.</p>
-    <p>🧬 Synthetic Data Augmentation: Expanded the feature space by applying affine transformations via scipy to 25k samples.</p>
-    <p>🛡️ L2 Regularization & Decay: Stabilized gradient descent and closed a 10% overfitting gap by manually deriving and applying L2 penalties to the weight updates:</p>
-               <p>$$W_{new} = W_{old} - \alpha \left( \frac{\partial L}{\partial W} + \lambda W_{old} \right)$$</p>
-      <p>(Where $\alpha$ smoothly decays at a rate of 0.85 per epoch)</p> 
-    <h2>🔍 Visualizations & Feature Maps</h2>
-    To truly understand what the CNN is "learning," we have to look inside the hidden layers.
-    <h3>How the Kernels Work</h3>
-    In this architecture, I implemented 16 custom kernels (3x3 matrices). During the forward pass, these kernels convolve (slide) across the 28x28 input image. Each kernel acts as a specialized filter, trained strictly via backpropagation to detect specific low-level features such as horizontal lines, vertical edges, or sharp loops.
-    <h3>Inside the Brain</h3>
-    When an image is passed through these 16 kernels and the ReLU activation function (which drops negative values to introduce non-linearity), it produces 16 distinct "Feature Maps."Below is a visualization of what the CNN actually "sees" inside its first layer when looking at a handwritten digit. (Notice how bright yellow areas indicate high activation—this is where a specific kernel successfully found the geometric shape it was trained to look for!)
-</div>
+## 🧠 Architecture & Math
+
+The architecture is purposefully lean, designed to maximize generalization through a single-pass convolutional feature extractor:
+
+* **Conv Layer:** 16 Learned Kernels (3x3), ReLU Activation, Max Pooling (2x2).
+* **Dense ANN:** Flatten -> 128 Hidden -> 64 Hidden -> Output Layer.
+
+### Advanced Optimizations
+To achieve production-grade performance using pure NumPy, I implemented several advanced computational strategies:
+
+> **⚡ Numba JIT Compilation:** Wrapped core matrix operations in `@njit(fastmath=True)` to execute at C-level speeds, overcoming the Python interpreter bottleneck.
+> 
+> **🧬 Synthetic Data Augmentation:** Expanded the feature space by applying affine transformations via SciPy to 25k samples.
+> 
+> **🛡️ L2 Regularization & Decay:** Stabilized gradient descent and closed a 10% overfitting gap by manually deriving and applying L2 penalties to the weight updates:
+
+$$W_{new} = W_{old} - \alpha \left( \frac{\partial L}{\partial W} + \lambda W_{old} \right)$$
+
+<p>(Where $\alpha$ smoothly decays at a rate of 0.85 per epoch).</p>
+
+---
+
+## 🔍 Visualizations & Feature Maps
+
+To truly understand what the CNN is "learning," we have to look inside the hidden layers.
+
+### How the Kernels Work
+In this architecture, I implemented **16 custom kernels (3x3 matrices)**. During the forward pass, these kernels convolve (slide) across the 28x28 input image. Each kernel acts as a specialized filter, trained strictly via backpropagation to detect specific low-level features such as horizontal lines, vertical edges, or sharp loops.
+
+### Inside the Brain
+When an image is passed through these 16 kernels and the **ReLU** activation function (which drops negative values to introduce non-linearity), it produces 16 distinct "Feature Maps."
+
+Below are visualizations of what the CNN actually "sees" inside its first layer when looking at a handwritten digit. Notice how the bright yellow areas indicate high activation—this is where a specific kernel successfully found the geometric shape it was trained to look for!
+
+<p align="center">
+  <img src="Screenshot%202026-05-20%20214323.png" width="48%" />
+  <img src="Screenshot%202026-05-20%20214344.png" width="48%" />
+</p>
+
+---
 
 ## 💻 Quick Start
 
